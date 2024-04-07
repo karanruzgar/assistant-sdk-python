@@ -452,9 +452,20 @@ def main(api_endpoint, credentials, project_id,
         # and playing back assistant response using the speaker.
         # When the once flag is set, don't wait for a trigger. Otherwise, wait.
         wait_for_user_trigger = not once
-        while True:
-            if wait_for_user_trigger:
-                click.pause(info='Press Enter to send a new request...')
+
+import pvporcupine
+
+# AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
+access_key = "key is here"
+
+handle = pvporcupine.create(access_key=access_key, keywords=['porcupine'])
+
+def get_next_audio_frame():
+    pass
+
+while True:
+    keyword_index = handle.process(get_next_audio_frame())
+    if keyword_index >= 0:
             continue_conversation = assistant.assist()
             # wait for user trigger if there is no follow-up turn in
             # the conversation.
